@@ -7,7 +7,7 @@ if [[ $USER == "root" ]]; then
     echo -e " --------------------------------------- "
     echo
     sleep 1
-    echo -e " \033[31;7;5;107m [+] \033[0m Configurando o Firewall..."
+    echo -e "\033[31;7;5;107m [+] \033[0m Configurando o Firewall..."
     echo
     sleep 1
     echo -e " --------------------------------------- "
@@ -24,7 +24,7 @@ if [[ $USER == "root" ]]; then
     ip link set $placa2 up
 
     #Faz com que a placa host-only faça a busca DHCP por IP.
-    echo "Realizando requisição por IP na placa 2."
+    echo "[+] Realizando requisição por IP na placa 2."
     dhclient $placa2
         
     #Bloqueando conexões no iptables.
