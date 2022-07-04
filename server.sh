@@ -26,6 +26,12 @@ if [[ $USER == "root" ]]; then
     #Faz com que a placa host-only faça a busca DHCP por IP.
     echo "Realizando requisição por IP na placa 2."
     dhclient $placa2
+        
+    #Bloqueando conexões no iptables.
+    echo "[+] Bloqueando conexões no servidor."
+    iptables -P INPUT DROP
+    iptables -P FORWARD DROP
+    iptables -P OUTPUT DROP
 
     #Ativa o encanmihamento de pacotes.
     echo 1 > /proc/sys/net/ipv4/ip_forward
