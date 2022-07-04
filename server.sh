@@ -33,6 +33,11 @@ if [[ $USER == "root" ]]; then
     iptables -P FORWARD DROP
     iptables -P OUTPUT DROP
 
+    #Liberando conexõe SSH.
+    echo "[x] Liberando conexão SSH na porta 22."
+    iptables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+    iptables -A OUTPUT -p tcp -m tcp --sport 22 -j ACCEPT
+    
     #Ativa o encanmihamento de pacotes.
     echo 1 > /proc/sys/net/ipv4/ip_forward
 
