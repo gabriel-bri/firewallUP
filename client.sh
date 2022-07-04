@@ -6,7 +6,7 @@ if [[ $USER == "root" ]]; then
 
         #Faz a validação verificando se o IP foi passado, caso contrário
         #retorna um erro exigindo o IP.
-        if [[ $1 == " " ]]; then
+        if [[ $1 == "" ]]; then
 
              #Mensagem de erro.
              echo -e " --------------------------------------- "
