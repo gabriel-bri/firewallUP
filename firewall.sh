@@ -15,24 +15,31 @@ if [[ $USER == "root" ]]; then
     #Interface bridge.
     placa1=`ip a | awk -F : '{print $2}' | grep "en" | head -n 1`
     #Interface host-only.
-    placa2=`ip a | awk -F : '{print $2}' | grep "en" | tail -n 1`
+    placa2=`ip a | awk -F : '{print $2}' | grep "en" | head -n 2 | tail -n 1`
+    #Interface host-only
+    placa3=`ip a | awk -F : '{print $2}' | grep "en" | tail -n 1`
 
     #Faz com que as duas placas sejam ativadas.
     echo "[+] Ativando placa 1."
     ip link set $placa1 up
     echo "[+] Ativando placa 2."
     ip link set $placa2 up
+    echo "[+] Ativando placa 3."
+    ip link set $placa3 up
 
-    #Faz com que a placa host-only faça a busca DHCP por IP.
+    #Faz com que as placa host-only faça a busca DHCP por IP.
     echo "[+] Realizando requisição por IP na placa 2."
     dhclient $placa2
-        
+
+    echo "[+] Realizando requisição por IP na placa 3."
+    dhclient $placa3
+
     #Bloqueando conexões no iptables.
     echo "[+] Bloqueando conexões no servidor."
     iptables -P INPUT DROP
     iptables -P FORWARD DROP
     iptables -P OUTPUT DROP
-
+    
     #Liberando conexõe SSH.
     echo "[+] Liberando conexão SSH na porta 22."
     iptables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
@@ -45,6 +52,14 @@ if [[ $USER == "root" ]]; then
     #Adiciona uma regra no IPTABLES para a interface bridge.
     echo "[+] Adicionando mascaramento IP."
     iptables -t nat -A POSTROUTING -o $placa1 -j MASQUERADE
+
+    echo "[+] Recarregando arquivos de configuração do Squid."
+    sudo invoke-rc.d squid reload
+
+    echo "[+] Reiniciando o Squid..."
+    sudo invoke-rc.d squid restart
+#ip a | grep en | grep inet |  awk -F  " '{print $2}
+#ipcalc $ip | grep Network |  awk -F  " '{print $2}
 
 else
     #Mensagem de erro.
