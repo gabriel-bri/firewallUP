@@ -76,7 +76,7 @@ if [[ $USER == "root" ]]; then
     redePlaca2=`ipcalc $ipPlaca2 | grep "Network" |  awk -F  " " '{print $2}'`
     redePlaca3=`ipcalc $ipPlaca3 | grep "Network" |  awk -F  " " '{print $2}'`
     ipRede2=`ipcalc $ipPlaca2 | grep "Network" |  awk -F  " " '{print $2}' | rev | cut -c4- | rev`
-    restoString=`ipcalc $ipPlaca2 | grep "Network" |  awk -F  " " '{print $2}' | awk -F "/" '{print $2}'
+    restoString=`ipcalc $ipPlaca2 | grep "Network" |  awk -F  " " '{print $2}' | awk -F "/" '{print $2}'`
 
     echo "[+] Trabalhando em configurações do Squid..."
     #Susbtitue a rede que está no arquivo pela rede na qual o script está sendo executado.
