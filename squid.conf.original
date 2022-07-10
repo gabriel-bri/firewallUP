@@ -1549,10 +1549,10 @@ include /etc/squid/conf.d/*.conf
 # Adapt localnet in the ACL section to list your (internal) IP networks
 # from where browsing should be allowed
 #http_access allow localnet
-http_access allow localhost
+#http_access allow localhost
 
 # And finally deny all other access to this proxy
-http_access deny all
+http_access allow all
 
 #  TAG: adapted_http_access
 #	Allowing or Denying access based on defined access lists

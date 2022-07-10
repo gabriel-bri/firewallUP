@@ -32,7 +32,7 @@ if [[ $USER == "root" ]]; then
     sudo apt update
     sudo apt install squid -y
     sudo apt install ipcalc -y
- 
+
     #Faz com que as placa host-only faça a busca DHCP por IP.
     echo "[+] Realizando requisição por IP na placa 2."
     dhclient $placa2
@@ -64,7 +64,7 @@ if [[ $USER == "root" ]]; then
     iptables -A INPUT -p icmp -j ACCEPT
     iptables -A OUTPUT -p icmp -j ACCEPT
 
-    #Liberando conexõe SSH.
+    #Liberando conexõe DNS.
     echo "[+] Liberando conexões DNS na porta 53."
     iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
     iptables -A INPUT -p udp --sport 53 -j ACCEPT
@@ -75,12 +75,20 @@ if [[ $USER == "root" ]]; then
 
     redePlaca2=`ipcalc $ipPlaca2 | grep "Network" |  awk -F  " " '{print $2}'`
     redePlaca3=`ipcalc $ipPlaca3 | grep "Network" |  awk -F  " " '{print $2}'`
-    ipRede2=`ipcalc $ipPlaca2 | grep "Network" |  awk -F  " " '{print $2}' | rev | cut -c4- | rev`
-    restoString=`ipcalc $ipPlaca2 | grep "Network" |  awk -F  " " '{print $2}' | awk -F "/" '{print $2}'`
 
     echo "[+] Trabalhando em configurações do Squid..."
+    iptables -t nat -A PREROUTING -i $placa2 -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 3129
+    iptables -t nat -A PREROUTING -i $placa2 -p tcp -m tcp --dport 433 -j REDIRECT --to-ports 3129
+
+    cp squid.conf.original squid.conf
+
     #Susbtitue a rede que está no arquivo pela rede na qual o script está sendo executado.
-    sed -i -e 's/'192.168.150.0\\/24'\b/'$ipRede2\\/$restoString'/g' squid.conf
+    echo -e "acl localnet src $redePlaca2 \n
+    acl blockuece url_regex uece \n
+    http_access deny localnet blockuece \n
+    acl blockufc url_regex ufc \n
+    http_access deny localnet blockufc \n
+    http_access allow localnet" >> squid.conf
 
     #Cria um backup do arquivo original do Squid.
     echo "[+] Criando backup das configurações do Squid."
