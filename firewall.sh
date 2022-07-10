@@ -27,6 +27,12 @@ if [[ $USER == "root" ]]; then
     echo "[+] Ativando placa 3."
     ip link set $placa3 up
 
+    #Pacotes adicionais
+    echo "[+] Instalando pacotes adicionais."
+    sudo apt update
+    sudo apt install squid -y
+    sudo apt install ipcalc -y
+ 
     #Faz com que as placa host-only faça a busca DHCP por IP.
     echo "[+] Realizando requisição por IP na placa 2."
     dhclient $placa2
