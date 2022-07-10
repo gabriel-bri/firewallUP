@@ -34,6 +34,14 @@ if [[ $USER == "root" ]]; then
     echo "[+] Realizando requisição por IP na placa 3."
     dhclient $placa3
 
+    #Ativa o encanmihamento de pacotes.
+    echo "[+] Ativando encaminhamento de pacotes."
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+
+    #Adiciona uma regra no IPTABLES para a interface bridge.
+    echo "[+] Adicionando mascaramento IP."
+    iptables -t nat -A POSTROUTING -o $placa1 -j MASQUERADE
+
     #Bloqueando conexões no iptables.
     echo "[+] Bloqueando conexões no servidor."
     iptables -P INPUT DROP
@@ -54,14 +62,6 @@ if [[ $USER == "root" ]]; then
     echo "[+] Liberando conexões DNS na porta 53."
     iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
     iptables -A INPUT -p udp --sport 53 -j ACCEPT
-
-    #Ativa o encanmihamento de pacotes.
-    echo "[+] Ativando encaminhamento de pacotes."
-    echo 1 > /proc/sys/net/ipv4/ip_forward
-
-    Adiciona uma regra no IPTABLES para a interface bridge.
-    echo "[+] Adicionando mascaramento IP."
-    iptables -t nat -A POSTROUTING -o $placa1 -j MASQUERADE
 
     ipPlaca1=`ip a | grep "en" | grep "inet" |  awk -F  " " '{print $2}' | head -n 1`
     ipPlaca2=`ip a | grep "en" | grep "inet" |  awk -F  " " '{print $2}' | head -n 2 | tail -n 1`
