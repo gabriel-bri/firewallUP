@@ -19,6 +19,9 @@ if [[ $USER == "root" ]]; then
     #Interface host-only
     placa3=`ip a | awk -F : '{print $2}' | grep "en" | tail -n 1`
 
+    #Configurando o DNS do firewall
+    sed -i 's/127.0.0.53/8.8.8.8/g' /etc/resolv.conf
+
     #Faz com que as duas placas sejam ativadas.
     echo "[+] Ativando placa 1."
     ip link set $placa1 up
