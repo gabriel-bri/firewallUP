@@ -4,12 +4,12 @@
 #informa ao usuário que ele precisa de privilégios.
 if [[ $USER == "root" ]]; then
 
-        #Faz a validação verificando se o IP foi passado, caso contrário
-        #retorna um erro exigindo o IP.
         if [[ $1 == "" ]]; then
-
-             #Mensagem de erro.
+        
              echo "Instalando o Apache"
+             sudo apt update
+             sudo apt install apache2
+             
         else
              echo -e " --------------------------------------- "
              echo
