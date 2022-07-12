@@ -34,11 +34,18 @@ if [[ $USER == "root" ]]; then
              echo -e " --------------------------------------- "
 
 
+             #Configurando DNS.
+             sed -i 's/127.0.0.53/8.8.8.8/g' /etc/resolv.conf
+             
+             placa1=`ip a | awk -F : '{print $2}' | grep "en"`
+
              #Cria um cópia de segurança do arquivo original.
              echo "[+] Criando backup do arquivo Netplan."
-             mv /etc/netplan/00-installer-config.yaml /etc/netplan/00-installer-config.yaml.bkp
+             cp /etc/netplan/00-installer-config.yaml /etc/netplan/00-installer-config.yaml.bkp
+
              #Copia o arquivo para a pasta de destino.
              echo "[+] Substituindo arquivo Netplan com as configurações de DNS."
+             sed -i 's/ens33/$placa1/g' 00-installer-config.yaml
              cp 00-installer-config.yaml /etc/netplan/
 
              #Aplica as configurações.
