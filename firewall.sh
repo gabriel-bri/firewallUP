@@ -120,6 +120,19 @@ if [[ $USER == "root" ]]; then
     iptables -A FORWARD -s $redePlaca2 -p tcp -m tcp --dport 80 -j ACCEPT
     iptables -A FORWARD -d $redePlaca2 -p tcp -m tcp --sport 80 -j ACCEPT
     iptables -A FORWARD -d $redePlaca2 -p tcp -m tcp --dport 80 -j ACCEPT
+    
+    #Permissão de FTP.
+    iptables -A FORWARD -s $redePlaca2 -p tcp -m tcp --sport 21 -j ACCEPT
+    iptables -A FORWARD -s $redePlaca2 -p tcp -m tcp --dport 21 -j ACCEPT
+    iptables -A FORWARD -d $redePlaca2 -p tcp -m tcp --sport 21 -j ACCEPT
+    iptables -A FORWARD -d $redePlaca2 -p tcp -m tcp --dport 21 -j ACCEPT
+    
+
+    #Permissão de SMTP.
+    iptables -A FORWARD -s $redePlaca2 -p tcp -m tcp --sport 25 -j ACCEPT
+    iptables -A FORWARD -s $redePlaca2 -p tcp -m tcp --dport 25 -j ACCEPT
+    iptables -A FORWARD -d $redePlaca2 -p tcp -m tcp --sport 25 -j ACCEPT
+    iptables -A FORWARD -d $redePlaca2 -p tcp -m tcp --dport 25 -j ACCEPT
 
     #Permissão de DNS.
     iptables -A FORWARD -d $redePlaca2 -p udp -m udp --dport 53 -j ACCEPT
