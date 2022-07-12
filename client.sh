@@ -47,7 +47,7 @@ if [[ $USER == "root" ]]; then
 
              #Adiciona rota de comunicação.
              sleep 5
-             echo "[+] Configurando o gateway padrão".
+             echo "[+] Configurando o gateway padrão"
              ip route add default via $1
 
         fi
